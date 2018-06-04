@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "ABMCL_Movies.h"
+
+typedef struct{
+    int num;
+    char c;
+}prueba;
+
+int main()
+{
+    FILE *archivo;
+    prueba lectura;
+    int i,n;
+    char c;
+    prueba datos[5];
+    for (i=0, i<5, i++){
+        scanf("%d", &n);
+        fflush(stdin);
+        scanf("%c",&c);
+    }
+    archivo=fopen("archivodatos.dat", "ab");
+    fwrite(datos, sizeof(prueba), 5, archivo);
+    fclose(archivo);
+    archivo=fopen("archivodatos.dat", "rb");
+    while(!feof(archivo))
+    {
+        fread(&lectura, sizeof(prueba), 1, archivo);
+        if(!feof(archivo))
+        {
+            printf("%d\n", lectura.num);
+            printf("%c\n", lectura.c);
+        }
+    }
+
+
+
+    return 0;
+}
