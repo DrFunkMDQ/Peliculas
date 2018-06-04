@@ -1,0 +1,19 @@
+# depslib dependency file v1.0
+1528127130 source:c:\users\emili\google drive\c\practico 6 bis\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"ABMCL_Movies.h"
+
+1528129368 c:\users\emili\google drive\c\practico 6 bis\abmcl_movies.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1528120367 source:c:\users\emili\google drive\c\practico 6 bis\abmcl_movies.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<locale.h>
+	"ABMCL_Movies.h"
+
