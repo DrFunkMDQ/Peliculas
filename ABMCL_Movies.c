@@ -34,6 +34,44 @@ int consultaExistenciaArchivo(char archivoPeliculas[])
     return valor;
 }
 
+int consultaExistenciaPelicula(char archivoPeliculas[], char nombre[])
+{
+    FILE *peliculas;
+    stPelicula aux;
+    int existe;
+    peliculas=fopen(archivoPeliculas, "rb");
+    while(!feof(peliculas) && (strcmpi(nombre, aux.nombrePelicula)!=0))
+    {
+        fread(&aux, sizeof(stPelicula),1, peliculas);
+    }
+    if(strcmpi(nombre, aux.nombrePelicula)!=0)
+        existe=0;
+    else
+        existe=ftell(peliculas)/sizeof(stPelicula);
+    fclose(peliculas);
+    return existe;
+}
+
+int devuelveUltimoID(char archivoPeliculas[])
+{
+    FILE *peliculas;
+    stPelicula aux;
+    int id;
+    peliculas=fopen(archivoPeliculas, "rb");
+    fseek(peliculas, 0, SEEK_END);
+
+    if (ftell(peliculas)==0)
+    {
+        id=1;
+    }
+    else
+    {
+        fseek(peliculas, -1*sizeof(stPelicula), SEEK_END);
+        fread(&aux, sizeof(stPelicula),1,peliculas);
+        id=(aux.idPelicula)+1;
+    }
+    return id;
+}
 
 void cargaArchivoPeliculas(char archivoPeliculas[])
 {
@@ -74,46 +112,6 @@ void cargaArchivoPeliculas(char archivoPeliculas[])
     }
 }
 
-int devuelveUltimoID(char archivoPeliculas[])
-{
-    FILE *peliculas;
-    stPelicula aux;
-    int id;
-    peliculas=fopen(archivoPeliculas, "rb");
-    fseek(peliculas, 0, SEEK_END);
-
-    if (ftell(peliculas)==0)
-    {
-        id=1;
-    }
-    else
-    {
-        fseek(peliculas, -1*sizeof(stPelicula), SEEK_END);
-        fread(&aux, sizeof(stPelicula),1,peliculas);
-        id=(aux.idPelicula)+1;
-    }
-    return id;
-}
-
-int consultaExistenciaPelicula(char archivoPeliculas[], char nombre[])
-{
-    FILE *peliculas;
-    stPelicula aux;
-    int existe;
-    peliculas=fopen(archivoPeliculas, "rb");
-    while(!feof(peliculas) && (strcmpi(nombre, aux.nombrePelicula)!=0))
-    {
-        fread(&aux, sizeof(stPelicula),1, peliculas);
-    }
-    if(strcmpi(nombre, aux.nombrePelicula)!=0)
-        existe=0;
-    else
-        existe=1;
-    fclose(peliculas);
-    return existe;
-}
-
-
 stPelicula cargaPelicula(int id)
 {
     stPelicula peliculaVacia;
@@ -132,11 +130,53 @@ stPelicula cargaPelicula(int id)
     gets(peliculaVacia.pais);
     printf("Ingrese el anio:\n");
     scanf("%d",&peliculaVacia.anio);
-    printf("Ingrese la valoracion:\n");
+    printf("Ingrese la valoracion (de 1 a 5):\n");
     scanf("%d",&peliculaVacia.valoracion);
+    while((peliculaVacia.valoracion<1) & (peliculaVacia.valoracion>5))
+    {
+        printf("Valoración incorrecta. Solo valores enteros entre 1 y 5\n");
+        scanf("%d",&peliculaVacia.valoracion);
+    }
     printf("Apta para mayores de:\n");
     scanf("%d",&peliculaVacia.pm);
+    while((peliculaVacia.pm !=0) & (peliculaVacia.pm !=13) & (peliculaVacia.pm !=16) & (peliculaVacia.pm !=18))
+    {
+        printf("Calificación incorrecta, vuelva a ingresar (0, 13, 16 o 18)\n");
+        scanf("%d",&peliculaVacia.pm);
+    }
     printf("¿Esta disponible?:\n");
     scanf("%d",&peliculaVacia.eliminado);
+    while((peliculaVacia.eliminado !=1) & (peliculaVacia.eliminado !=0))
+    {
+        printf("Error. Está Disponible? 1/0\n");
+        scanf("%d",&peliculaVacia.eliminado);
+    }
     return peliculaVacia;
+}
+
+void bajaPelicula(char archivoPeliculas[])
+{
+    FILE *peliculas;
+    stPelicula PeliculaAEliminar;
+    char peliculaBuscada[30];
+    int posicion, a;
+
+    printf("Ingrese la película buscada\n");
+    fflush(stdin);
+    gets(peliculaBuscada);
+    posicion=consultaExistenciaPelicula(archivoPeliculas, "yy");
+    if(posicion!=0)
+    {
+        printf("//////%d", posicion);
+        peliculas=fopen(archivoPeliculas, "r+b");
+        //fseek(peliculas, (posicion*sizeof(stPelicula)), SEEK_SET);
+        fread(&PeliculaAEliminar, sizeof(stPelicula), 1, archivoPeliculas);
+        a=PeliculaAEliminar.eliminado;
+        printf("////%d", a);
+        fwrite(&PeliculaAEliminar, sizeof(stPelicula), 1, archivoPeliculas);
+    }
+    else
+    {
+        printf("La película no existe dentro del listado\n");
+    }
 }
