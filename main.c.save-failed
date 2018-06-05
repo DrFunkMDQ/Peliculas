@@ -1,0 +1,25 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "ABMCL_Movies.h"
+
+const char archivoPeliculas[30]={"movies.dat"};
+
+int main()
+{
+    stPelicula peliculita;
+    FILE *peliculas;
+    peliculas=fopen(archivoPeliculas, "rb");
+    //cargaArchivoPeliculas(archivoPeliculas);
+    while(!feof(peliculas))
+    {
+        fread(&peliculita, sizeof(stPelicula), 1 , peliculas);
+        if(!feof(peliculas))
+            printf("%d\n %s\n %s\n %s\n %s\n %d\n %d\n %d\n %d\n", peliculita.idPelicula, peliculita.nombrePelicula, peliculita.director, peliculita.genero, peliculita.pais, peliculita.anio, peliculita.valoracion, peliculita.pm, peliculita.eliminado);
+    }
+
+
+    return 0;
+}
+
+

@@ -51,16 +51,20 @@ void cargaArchivoPeliculas(char archivoPeliculas[])
         {
             printf("Ingrese la cantidad de peliculas a cargar\n");
             scanf("%d", &cant);
+            id=devuelveUltimoID(archivoPeliculas);
             for(i=0; i<cant; i++)
             {
-                id=devuelveUltimoID(archivoPeliculas);
                 nuevaPelicula=cargaPelicula(id);
                 existe=consultaExistenciaPelicula(archivoPeliculas, nuevaPelicula.nombrePelicula);
                 if(existe==0)
                     fwrite(&nuevaPelicula, sizeof(stPelicula), 1, peliculas);
                 else
                     printf("La pelicula ya existe dentro del listado\n");
+                id++;
             }
+            printf("Desea cargar mas peliculas? s/n \n");
+            fflush(stdin);
+            scanf("%c", &c);
         }
         fclose(peliculas);
     }
@@ -77,15 +81,16 @@ int devuelveUltimoID(char archivoPeliculas[])
     int id;
     peliculas=fopen(archivoPeliculas, "rb");
     fseek(peliculas, 0, SEEK_END);
-    fseek(peliculas, (-1*sizeof(stPelicula)), SEEK_CUR);
+
     if (ftell(peliculas)==0)
     {
         id=1;
     }
     else
     {
+        fseek(peliculas, -1*sizeof(stPelicula), SEEK_END);
         fread(&aux, sizeof(stPelicula),1,peliculas);
-        id=aux.idPelicula;
+        id=(aux.idPelicula)+1;
     }
     return id;
 }

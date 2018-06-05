@@ -17,3 +17,21 @@
 	<locale.h>
 	"ABMCL_Movies.h"
 
+1528158457 source:c:\users\emili\google drive\c\6 bis git\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"ABMCL_Movies.h"
+
+1528129670 c:\users\emili\google drive\c\6 bis git\abmcl_movies.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1528161271 source:c:\users\emili\google drive\c\6 bis git\abmcl_movies.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<locale.h>
+	"ABMCL_Movies.h"
+
