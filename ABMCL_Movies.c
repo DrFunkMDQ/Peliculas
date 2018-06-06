@@ -159,24 +159,24 @@ void bajaPelicula(char archivoPeliculas[])
     FILE *peliculas;
     stPelicula PeliculaAEliminar;
     char peliculaBuscada[30];
-    int posicion, a;
+    long posicion, a;
 
     printf("Ingrese la película buscada\n");
     fflush(stdin);
     gets(peliculaBuscada);
-    posicion=consultaExistenciaPelicula(archivoPeliculas, "yy");
+    posicion=consultaExistenciaPelicula(archivoPeliculas, peliculaBuscada);
+    posicion--;///PARA POSICIONARME EN EL BLOQUE, YA QUE DEL OTRO MODO ESTOY AL FINAL DEL MISMO Y LEE EL SIGUIENTE
     if(posicion!=0)
     {
-        printf("//////%d", posicion);
         peliculas=fopen(archivoPeliculas, "r+b");
-        //fseek(peliculas, (posicion*sizeof(stPelicula)), SEEK_SET);
-        fread(&PeliculaAEliminar, sizeof(stPelicula), 1, archivoPeliculas);
-        a=PeliculaAEliminar.eliminado;
-        printf("////%d", a);
-        fwrite(&PeliculaAEliminar, sizeof(stPelicula), 1, archivoPeliculas);
+        fseek(peliculas, (posicion*sizeof(stPelicula)), SEEK_SET);
+        fread(&PeliculaAEliminar, sizeof(stPelicula), 1, peliculas);
+        PeliculaAEliminar.eliminado=1;
+        //fwrite(&PeliculaAEliminar, sizeof(stPelicula), 1, archivoPeliculas);
     }
     else
     {
         printf("La película no existe dentro del listado\n");
     }
+    fclose(peliculas);
 }
